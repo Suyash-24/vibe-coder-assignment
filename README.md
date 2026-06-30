@@ -1,80 +1,33 @@
-# Wobb Frontend Assignment
+# Vibe Coder Assignment
 
-A starter influencer search application built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. This project is intentionally left in a rough-but-working state for candidates to improve.
+This repository contains my solution to the Vibe Coder Assignment.
 
-## Getting Started
+## What I Changed
+- **Bug Fixes:** Fixed the `clickCount` recursive bug in `SearchPage.tsx` and modified `dataHelpers.ts` to use case-insensitive username searching. Fixed `ProfileList` column constraints (removed hardcoded widths) making it fully responsive. Fixed TS types (e.g., adding `url` to the summary object).
+- **UI/UX Redesign:** Completely overhauled the UI to feature a premium, modern design using Tailwind CSS. Added glassmorphic headers, subtle gradients, `lucide-react` icons, and sleek `framer-motion` animations. Transformed the `PlatformFilter` into a clean segmented control and `ProfileList` into a responsive CSS Grid.
+- **State Management (Zustand):** Replaced the intended React Context / Local State with `zustand`. This acts as a centralized store for managing the active `searchQuery`, `platform`, and the list of saved profiles. Retaining search state ensures that when users navigate from a profile page back to the dashboard, their filter configuration isn't lost.
+- **Select Profile & Add to List Feature:** Successfully implemented the "Saved Profiles" feature. Profiles can be added or removed from the dashboard and the profile detail page. A sleek sliding drawer (accessible from the navbar) allows viewing and managing the list. The list is persistent across page reloads via `zustand`'s `persist` middleware (saving to `localStorage`).
+- **Code Quality & Performance Optimization:** 
+  - Restructured the codebase by adding `src/store` for state and standardizing utilities in `src/utils/styles.ts` (using `clsx` and `tailwind-merge`).
+  - Added `React.memo` to `ProfileCard` to avoid unnecessary re-renders when the saved list is updated.
+  - Used `useMemo` in `SearchPage` for derived filtering logic.
 
-```bash
-npm install
-npm run dev
-```
+## Libraries Added
+- **zustand**: Selected for state management due to its lightweight nature and built-in persistence middleware.
+- **lucide-react**: Used for premium, consistent iconography throughout the application.
+- **framer-motion**: Added to bring the UI to life with micro-interactions (hover scales, drawer slide-ins, and list entrance animations).
+- **clsx & tailwind-merge**: Essential utilities for building a standard `cn` function, which allows for clean, dynamic Tailwind class composition without conflicts.
 
-Open [http://localhost:5173](http://localhost:5173) to view the app.
+## Assumptions Made
+- The `searchQuery` and `platform` filters should persist when viewing a profile so the user can easily go back to where they left off without needing to type their query again.
+- A sliding drawer is a more modern, frictionless way to view saved items without leaving the core search experience, rather than navigating to a completely separate route.
+- The assignment's React Context requirement meant introducing robust state management. Since no Context was initially found, I opted directly for `zustand` as requested ("Replace React Context with Zustand").
 
-## What's Included
+## Trade-offs
+- Used `framer-motion` which increases the bundle size slightly. However, given the requirement for a modern, polished UI/UX, the visual improvement far outweighs the small bundle cost.
+- Opted to persist the entire `SavedProfile` objects in localStorage. If the data size were massive, it would be better to only persist `username` and `platform`, re-fetching the profiles on load. Since the dataset is small and read locally, persisting the whole object allows for immediate rendering.
 
-- **Search / Dashboard** — filter influencers by platform (Instagram, YouTube, TikTok) and search by username or full name
-- **Profile Details** — click a profile to view extended data loaded from individual JSON files
-- **Routing** — `react-router-dom` with `/` (search) and `/profile/:username` (details)
-
-Sample data lives in:
-
-- `src/assets/data/search/` — platform search results (10 profiles each)
-- `src/assets/data/profiles/` — detailed profile JSON per username
-
-## How to Submit
-
-1. **Download or clone** this starter project to your machine.
-2. **Create a new repository** on your own GitHub account. Do not fork the original assignment repo — push your work to a repo you own.
-3. Complete the tasks below and push your changes to that repository.
-4. **Share the public GitHub repository URL** with us as your submission.
-
-### Deadline (strict)
-
-- **Due:** **2 July 2026, 2:00 PM IST** (Indian Standard Time, UTC+5:30)
-- **Any git commits made after this deadline will disqualify your submission.** We will only consider the repository state as of the deadline; late commits will not be reviewed.
-- Make sure your final work is pushed **before** the cutoff.
-
-## AI Usage
-
-You may use any AI tools (Cursor, ChatGPT, Claude, GitHub Copilot, etc.). We are evaluating your final solution and engineering decisions.
-
-## Your Tasks
-
-Complete the following as part of your submission:
-
-1. **Find and fix all bugs and quality issues** — the codebase contains intentional bugs and quality issues. Identify and resolve them.
-
-2. **Completely redesign the UI/UX** — replace the basic layout with a polished, modern interface. Focus on usability, visual hierarchy, and delight.
-
-3. **Replace React Context with Zustand** — when you implement state management for the selected list, use [Zustand](https://github.com/pmndrs/zustand) instead of React Context.
-
-4. **Implement "Select profile & Add to List"** — the disabled "Add to List" button is a stub. Build the full feature:
-   - Select / add profiles to a persistent list
-   - View and manage the selected list
-   - Handle duplicates appropriately
-
-5. **Improve code quality and project structure** — refactor as needed, add proper types, and follow React best practices.
-
-6. **Optimize performance** — apply sensible optimizations where appropriate.
-
-7. **Use any libraries you need** — you are not limited to the current stack. Choose tools that help you deliver a great result (UI kits, state managers, testing libraries, etc.).
-
-## Scripts
-
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Start development server |
-| `npm run build`| Production build         |
-| `npm run lint` | Run ESLint               |
-
-## Submission Notes
-
-- Document any assumptions or trade-offs in your README
-- Ensure `npm run build` passes before submitting
-- Focus on demonstrating your judgment — not every possible feature needs to be built, but the core assignment items should be addressed thoughtfully
-- Double-check that your repo is public (or that we have access) and that the link is included in your submission
-- Please make meaningful commits throughout your work. We may review your commit history.
-- **Bonus:** Deploying the app (e.g. Vercel, Netlify, GitHub Pages) is optional but will be considered a plus — include the live URL in your submission if you do
-
-Good luck!
+## Any Remaining Improvements
+- Add E2E tests using Cypress or Playwright to simulate the full user journey of searching and saving a profile.
+- Server-side integration: In a real app, the search should hit a backend API with proper pagination and debounce mechanisms, instead of loading JSON and filtering purely on the client side.
+- Add an interactive dark mode.
