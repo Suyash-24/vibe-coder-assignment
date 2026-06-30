@@ -181,7 +181,7 @@ export function ProfileDetailPage() {
           }}
         />
         {/* Profile content */}
-        <div style={{ padding: '0 32px 32px', marginTop: '-52px' }}>
+        <div style={{ padding: '0 32px 32px', marginTop: '-52px', position: 'relative', zIndex: 10 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Avatar row */}
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
